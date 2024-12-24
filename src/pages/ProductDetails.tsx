@@ -3,13 +3,28 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { Star, ArrowLeft, Check } from "lucide-react";
 import { Link } from "react-router-dom";
-import { products } from "@/data/products";
+import { useQuery } from "@tanstack/react-query";
+import { fetchProductById } from "@/services/api";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const { addToCart, items } = useCart();
-  const product = products.find((p) => p.id === id);
+  
+  const { data: product, isLoading, error } = useQuery({
+    queryKey: ['product', id],
+    queryFn: () => fetchProductById(id!),
+    enabled: !!id,
+  });
+  
   const isInCart = items.some(item => item.id === id);
+
+  if (isLoading) {
+    return <div className="container py-20">Loading product details...</div>;
+  }
+
+  if (error) {
+    return <div className="container py-20">Error loading product: {error.message}</div>;
+  }
 
   if (!product) {
     return (

@@ -8,8 +8,9 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Slider } from "./ui/slider";
-import { products } from "@/data/products";
-import type { Gender } from "@/data/products";
+import type { Gender, Product } from "@/data/products";
+import { useQuery } from "@tanstack/react-query";
+import { fetchProducts } from "@/services/api";
 
 export const FeaturedProducts = () => {
   const [filters, setFilters] = useState({
@@ -19,6 +20,19 @@ export const FeaturedProducts = () => {
     priceRange: [0, 500],
     minRating: 0,
   });
+
+  const { data: products = [], isLoading, error } = useQuery({
+    queryKey: ['products'],
+    queryFn: fetchProducts,
+  });
+
+  if (isLoading) {
+    return <div className="container py-20">Loading products...</div>;
+  }
+
+  if (error) {
+    return <div className="container py-20">Error loading products: {error.message}</div>;
+  }
 
   const filteredProducts = products.filter((product) => {
     return (
