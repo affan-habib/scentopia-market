@@ -1,4 +1,7 @@
 import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
+import { useCart } from "@/contexts/CartContext";
+import { Star } from "lucide-react";
 
 interface ProductCardProps {
   id: string;
@@ -6,9 +9,27 @@ interface ProductCardProps {
   price: number;
   image: string;
   description: string;
+  category: string;
+  subCategory: string;
+  gender: "men" | "women" | "unisex";
+  rating: number;
 }
 
-export const ProductCard = ({ id, name, price, image, description }: ProductCardProps) => {
+export const ProductCard = ({
+  id,
+  name,
+  price,
+  image,
+  description,
+  rating,
+}: ProductCardProps) => {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent navigation when clicking the button
+    addToCart({ id, name, price, image });
+  };
+
   return (
     <Link
       to={`/product/${id}`}
@@ -25,7 +46,28 @@ export const ProductCard = ({ id, name, price, image, description }: ProductCard
       <div className="mt-4 space-y-2">
         <h3 className="font-serif text-lg font-medium text-richBlack">{name}</h3>
         <p className="text-sm text-warmGray line-clamp-2">{description}</p>
-        <p className="font-serif text-lg font-medium">${price}</p>
+        <div className="flex items-center justify-between">
+          <p className="font-serif text-lg font-medium">${price}</p>
+          <div className="flex items-center gap-1">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <Star
+                key={index}
+                className={`h-4 w-4 ${
+                  index < rating
+                    ? "fill-yellow-400 text-yellow-400"
+                    : "fill-gray-200 text-gray-200"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+        <Button
+          onClick={handleAddToCart}
+          className="w-full mt-2"
+          variant="secondary"
+        >
+          Add to Cart
+        </Button>
       </div>
     </Link>
   );
