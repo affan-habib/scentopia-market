@@ -3,12 +3,12 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { Star, ArrowLeft, Check } from "lucide-react";
 import { Link } from "react-router-dom";
-import { featuredProducts } from "@/components/FeaturedProducts";
+import { products } from "@/data/products";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const { addToCart, items } = useCart();
-  const product = featuredProducts.find((p) => p.id === id);
+  const product = products.find((p) => p.id === id);
   const isInCart = items.some(item => item.id === id);
 
   if (!product) {
