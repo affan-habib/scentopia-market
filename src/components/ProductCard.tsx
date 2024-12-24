@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { useCart } from "@/contexts/CartContext";
-import { Star } from "lucide-react";
+import { Star, Check } from "lucide-react";
 
 interface ProductCardProps {
   id: string;
@@ -23,7 +23,8 @@ export const ProductCard = ({
   description,
   rating,
 }: ProductCardProps) => {
-  const { addToCart } = useCart();
+  const { addToCart, items } = useCart();
+  const isInCart = items.some(item => item.id === id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigation when clicking the button
@@ -64,9 +65,15 @@ export const ProductCard = ({
         <Button
           onClick={handleAddToCart}
           className="w-full mt-2"
-          variant="secondary"
+          variant={isInCart ? "secondary" : "default"}
         >
-          Add to Cart
+          {isInCart ? (
+            <span className="flex items-center gap-2">
+              <Check className="h-4 w-4" /> Added to Cart
+            </span>
+          ) : (
+            "Add to Cart"
+          )}
         </Button>
       </div>
     </Link>
