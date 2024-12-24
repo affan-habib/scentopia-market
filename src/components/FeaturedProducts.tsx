@@ -9,6 +9,8 @@ import {
 } from "./ui/select";
 import { Slider } from "./ui/slider";
 
+type Gender = "men" | "women" | "unisex";
+
 const featuredProducts = [
   {
     id: "1",
@@ -18,7 +20,7 @@ const featuredProducts = [
     description: "A sophisticated blend of Damascus rose and rare oud wood.",
     category: "Oriental",
     subCategory: "Woody",
-    gender: "unisex",
+    gender: "unisex" as Gender,
     rating: 4,
   },
   {
@@ -29,7 +31,7 @@ const featuredProducts = [
     description: "Fresh vetiver mixed with citrus notes and amber.",
     category: "Fresh",
     subCategory: "Citrus",
-    gender: "men",
+    gender: "men" as Gender,
     rating: 5,
   },
   {
@@ -40,7 +42,7 @@ const featuredProducts = [
     description: "Night-blooming jasmine with hints of vanilla and musk.",
     category: "Floral",
     subCategory: "White Floral",
-    gender: "women",
+    gender: "women" as Gender,
     rating: 4,
   },
 ];
@@ -49,7 +51,7 @@ export const FeaturedProducts = () => {
   const [filters, setFilters] = useState({
     category: "",
     subCategory: "",
-    gender: "",
+    gender: "" as "" | Gender,
     priceRange: [0, 500],
     minRating: 0,
   });
@@ -91,7 +93,7 @@ export const FeaturedProducts = () => {
 
           <Select
             onValueChange={(value) =>
-              setFilters((prev) => ({ ...prev, gender: value }))
+              setFilters((prev) => ({ ...prev, gender: value as "" | Gender }))
             }
           >
             <SelectTrigger>
