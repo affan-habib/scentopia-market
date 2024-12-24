@@ -49,18 +49,18 @@ const featuredProducts = [
 
 export const FeaturedProducts = () => {
   const [filters, setFilters] = useState({
-    category: "",
-    subCategory: "",
-    gender: "" as "" | Gender,
+    category: "all",
+    subCategory: "all",
+    gender: "all" as "all" | Gender,
     priceRange: [0, 500],
     minRating: 0,
   });
 
   const filteredProducts = featuredProducts.filter((product) => {
     return (
-      (!filters.category || product.category === filters.category) &&
-      (!filters.subCategory || product.subCategory === filters.subCategory) &&
-      (!filters.gender || product.gender === filters.gender) &&
+      (filters.category === "all" || product.category === filters.category) &&
+      (filters.subCategory === "all" || product.subCategory === filters.subCategory) &&
+      (filters.gender === "all" || product.gender === filters.gender) &&
       product.price >= filters.priceRange[0] &&
       product.price <= filters.priceRange[1] &&
       product.rating >= filters.minRating
@@ -79,12 +79,13 @@ export const FeaturedProducts = () => {
             onValueChange={(value) =>
               setFilters((prev) => ({ ...prev, category: value }))
             }
+            defaultValue="all"
           >
             <SelectTrigger>
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Categories</SelectItem>
+              <SelectItem value="all">All Categories</SelectItem>
               <SelectItem value="Oriental">Oriental</SelectItem>
               <SelectItem value="Fresh">Fresh</SelectItem>
               <SelectItem value="Floral">Floral</SelectItem>
@@ -93,14 +94,15 @@ export const FeaturedProducts = () => {
 
           <Select
             onValueChange={(value) =>
-              setFilters((prev) => ({ ...prev, gender: value as "" | Gender }))
+              setFilters((prev) => ({ ...prev, gender: value as "all" | Gender }))
             }
+            defaultValue="all"
           >
             <SelectTrigger>
               <SelectValue placeholder="Gender" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All</SelectItem>
+              <SelectItem value="all">All Genders</SelectItem>
               <SelectItem value="men">Men</SelectItem>
               <SelectItem value="women">Women</SelectItem>
               <SelectItem value="unisex">Unisex</SelectItem>
@@ -123,6 +125,7 @@ export const FeaturedProducts = () => {
             onValueChange={(value) =>
               setFilters((prev) => ({ ...prev, minRating: Number(value) }))
             }
+            defaultValue="0"
           >
             <SelectTrigger>
               <SelectValue placeholder="Min Rating" />
